@@ -25,7 +25,6 @@ LOGGER = logging.getLogger(__name__)
 
 
 def login_to_page(page):
-    """Function to login to the page."""
     page.goto(MAIN_URL)
     page.fill(SELECTORS["LAST_NAME_FIELD"], LAST_NAME)
     page.fill(SELECTORS["ACCESS_FIELD"], ACCESS_NUMBER)
@@ -33,7 +32,6 @@ def login_to_page(page):
 
 
 def verify_yearbook(page):
-    """Function to verify the yearbook."""
     assert page.wait_for_selector(SELECTORS["COMPANY_LOGO"])
     assert page.wait_for_selector(SELECTORS["RECIPIENT_NAME"])
     assert page.wait_for_selector(SELECTORS["ORDER_BUTTON"])
@@ -41,7 +39,6 @@ def verify_yearbook(page):
 
 
 def test_recipient_views_their_yearbook(page):
-    """Test function to check if recipient can view their yearbook."""
     login_to_page(page)
     verify_yearbook(page)
 
