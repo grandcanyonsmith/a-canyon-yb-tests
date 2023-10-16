@@ -21,6 +21,9 @@ else:
 
 
 def sign_in(page):
+    """
+    Function to sign in to the page
+    """
     page.locator('id=usernameField').fill(os.environ['USERNAME'])
     page.locator('id=nextButton').click()
     page.locator('id=passwordField').fill(os.environ['PASSWORD'])
@@ -40,6 +43,9 @@ yearbook_sections = {
 
 
 def random_yearbook_section():
+    """
+    Function to return a random yearbook section
+    """
     section_list = list(yearbook_sections.keys())
     random_section = random.choice(section_list)
     return random_section
@@ -47,7 +53,9 @@ def random_yearbook_section():
 
 @pytest.mark.ui
 def test_printed_yearbook_sections(page: Page):
-    # This is testing adding and removing sections to the printed yearbook template
+    """
+    Function to test adding and removing sections to the printed yearbook template
+    """
     page.goto(os.environ['MEDIA_LIBRARY_URL'])
     sign_in(page)
     page.locator('data-testid=client-search').fill("YB Publishing Automation")
@@ -63,7 +71,9 @@ def test_printed_yearbook_sections(page: Page):
 
 @pytest.mark.ui
 def test_digital_yearbook_sections(page: Page):
-    # This is testing adding and removing sections to the digital yearbook template
+    """
+    Function to test adding and removing sections to the digital yearbook template
+    """
     page.goto(os.environ['MEDIA_LIBRARY_URL'])
     sign_in(page)
     page.locator('data-testid=client-search').fill("YB Publishing Automation")
