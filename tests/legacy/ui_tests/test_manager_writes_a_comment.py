@@ -12,7 +12,7 @@ MAIN_URL = "https://vision-qa.appreciatehub.com/ui/yearbook/comment/invites/L2Fw
 SELECTORS = {
     "TEXTAREA": "textarea",
     "LINK": ".invite-whom",
-    "SEND_INVITE_BUTTON": "button:has-text('Send Invite')",
+    "SEND_INVITE_BUTTON": "button:has-text('Click Invite')",
     "DONE_BUTTON": "button:has-text('Done')",
     "USER_CLOSE": ".user-close",
     "RESEND_INVITATION_BUTTON": "button:has-text('Resend Invitation')",
