@@ -21,7 +21,9 @@ def login_to_culture_cloud(page, url, username, password):
     page.click('#nextButton')
     page.fill('#passwordField', password)
     page.click('#signInButton')
+    assert page.url == url
 
-def test_login_to_culture_cloud(browser):
+@pytest.mark.parametrize("url, username, password", [(env.get('CULTURE_CLOUD_URL'), env.get("AUTOMATION_USERNAME"), env.get('AUTOMATION_USER_PASSWORD'))])
+def test_login_to_culture_cloud(browser, url, username, password):
     """Test the login functionality of Culture Cloud."""
-    login_to_culture_cloud(browser, env['CULTURE_CLOUD_URL'], env["AUTOMATION_USERNAME"], env['AUTOMATION_USER_PASSWORD'])
+    login_to_culture_cloud(browser, url, username, password)
