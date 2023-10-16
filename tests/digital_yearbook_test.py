@@ -10,8 +10,7 @@ def browser():
     """Setup and teardown for browser."""
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page()
-        yield page
+        yield browser.new_page()
         browser.close()
 
 def login_to_culture_cloud(page, url, username, password):
