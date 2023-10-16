@@ -13,14 +13,16 @@ env_files = {
 
 current_environment = 'qa'
 
-if current_environment in env_files:
-    dotenv_path = env_files[current_environment]
-    load_dotenv(dotenv_path)
-else:
+if current_environment not in env_files:
     raise ValueError(f"Invalid environment: {current_environment}")
+dotenv_path = env_files[current_environment]
+load_dotenv(dotenv_path)
 
 
 def sign_in(page):
+    """
+    Function to sign in to the page
+    """
     page.locator('id=usernameField').fill(os.environ['USERNAME'])
     page.locator('id=nextButton').click()
     page.locator('id=passwordField').fill(os.environ['PASSWORD'])
@@ -40,14 +42,18 @@ yearbook_sections = {
 
 
 def random_yearbook_section():
+    """
+    Function to return a random yearbook section
+    """
     section_list = list(yearbook_sections.keys())
-    random_section = random.choice(section_list)
-    return random_section
+    return random.choice(section_list)
 
 
 @pytest.mark.ui
 def test_printed_yearbook_sections(page: Page):
-    # This is testing adding and removing sections to the printed yearbook template
+    """
+    Function to test adding and removing sections to the printed yearbook template
+    """
     page.goto(os.environ['MEDIA_LIBRARY_URL'])
     sign_in(page)
     page.locator('data-testid=client-search').fill("YB Publishing Automation")
@@ -63,7 +69,9 @@ def test_printed_yearbook_sections(page: Page):
 
 @pytest.mark.ui
 def test_digital_yearbook_sections(page: Page):
-    # This is testing adding and removing sections to the digital yearbook template
+    """
+    Function to test adding and removing sections to the digital yearbook template
+    """
     page.goto(os.environ['MEDIA_LIBRARY_URL'])
     sign_in(page)
     page.locator('data-testid=client-search').fill("YB Publishing Automation")
