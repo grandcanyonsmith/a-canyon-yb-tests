@@ -19,7 +19,6 @@ def setup_before_tests():
     """Setup before running tests."""
     test_run_id = tr.create_test_run(base_url, username, password, project_id, suite_id, run_name)
     os.environ["test_run_id"] = f"{test_run_id}"
-    pass
 
 @pytest.fixture(scope='session', autouse=True)
 def after_all_tests():
