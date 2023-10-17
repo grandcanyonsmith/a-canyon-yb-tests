@@ -19,7 +19,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests
-        python -c "
+        python -c """
 import requests
 import json
 
@@ -41,4 +41,4 @@ def send_post_request():
         print(response.json())
 
 send_post_request()
-"
+"""
