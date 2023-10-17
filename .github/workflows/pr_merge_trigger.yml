@@ -43,7 +43,6 @@ jobs:
             else:
                 print(response.json())
         
-        send_post_request()
-        "
+        send_post_request()"
 
         
