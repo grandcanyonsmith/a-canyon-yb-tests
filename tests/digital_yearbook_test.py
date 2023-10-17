@@ -10,7 +10,9 @@ def browser():
     """Setup and teardown for browser."""
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        yield browser.new_page()
+        page = browser.new_page()
+        page.set_default_timeout(5000)  # Set a default timeout of 5 seconds
+        yield page
         browser.close()
 
 def login_to_culture_cloud(page, url, username, password):
@@ -26,3 +28,4 @@ def login_to_culture_cloud(page, url, username, password):
 def test_login_to_culture_cloud(browser, url, username, password):
     """Test the login functionality of Culture Cloud."""
     login_to_culture_cloud(browser, url, username, password)
+#END
