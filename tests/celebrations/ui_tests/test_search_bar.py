@@ -1,36 +1,49 @@
 import pytest
-import re
-
-from playwright.sync_api import Page, expect
 import os
 from dotenv import load_dotenv
+from playwright.sync_api import Page, expect
 
-env_files = {
+ENV_FILES = {
     'qa': 'env/.env.qa',
     'stg': 'env/.env.stg',
     'prod': 'env/.env.prod',
     'gam': 'env/.env.gam',
 }
 
-current_environment = 'qa'
+CURRENT_ENVIRONMENT = os.getenv('CURRENT_ENVIRONMENT', 'qa')
 
-if current_environment in env_files:
-    dotenv_path = env_files[current_environment]
+def load_environment_variables(environment):
+    if environment not in ENV_FILES:
+        raise ValueError(f"Invalid environment: {environment}")
+    dotenv_path = ENV_FILES[environment]
     load_dotenv(dotenv_path)
-else:
-    raise ValueError(f"Invalid environment: {current_environment}")
+
+load_environment_variables(CURRENT_ENVIRONMENT)
+
 @pytest.mark.ui
 def test_login(page: Page):
-    page.goto(os.environ['ANNIVERSARIES_URL'])
-    page.locator('id=usernameField').fill(os.environ['CELEBRATIONS_USER'])
-    page.locator('id=nextButton').click()
-    page.locator('id=passwordField').fill(os.environ['PASSWORD'])
-    page.locator('id=signInButton').click()
+    # Define variables for better readability and maintainability
+    username = os.getenv('CELEBRATIONS_USER')
+    password = os.getenv('PASSWORD')
+    url = os.getenv('ANNIVERSARIES_URL')
 
-    expect(page.get_by_text("Anniversaries")).to_be_visible()
+    # Navigate to the URL
+    page.goto(url)
 
-    page.locator('id=mui-3').type("ned")
-    expect(page.get_by_text("ned")).to_be_visible()
-    page.locator('data-testid=current-user-name-header').click()
-    page.locator('data-testid=logout-link').click()
-    expect(page.get_by_text("You have been successfully logged out.")).to_be_visible()
+    # Fill in the login form and submit
+    page.fill('input[name="username"]', username)
+    page.click('button[id="nextButton"]')
+    page.fill('input[name="password"]', password)
+    page.click('button[id="signInButton"]')
+
+    # Verify successful login
+    expect(page).to_have_selector('text=Anniversaries', visible=True)
+
+    # Perform some actions
+    page.type('input[id="mui-3"]', "ned")
+    expect(page).to_have_selector('text=ned', visible=True)
+    page.click('button[data-testid="current-user-name-header"]')
+    page.click('a[data-testid="logout-link"]')
+
+    # Verify successful logout
+    expect(page).to_have_selector('text=You have been successfully logged out.', visible=True)
