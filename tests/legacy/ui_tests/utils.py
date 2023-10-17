@@ -13,9 +13,7 @@ TESTRAIL_DETAILS = Config.get_section("testrail")
 
 @pytest.fixture(scope="module")
 def browser():
-    """
-    Fixture to initialize and close the browser.
-    """
+    """Initialize and close the browser."""
     playwright = sync_playwright().start()
     browser = playwright.chromium.launch(headless=True)
     yield browser
@@ -25,26 +23,24 @@ def browser():
 
 @pytest.fixture(scope="module")
 def page(browser):
-    """
-    Fixture to create a new page context.
-    """
+    """Create a new page context."""
     context = browser.new_context()
     yield context.new_page()
 
 
-def post_test_result(
-    run_id, case_id, status_id, comment="This test failed for case_id"
-):
+def post_test_result(run_id, case_id, status_id, comment="This test failed for case_id"):
+    """Post test result to TestRail."""
     client = APIClient("https://octanner.testrail.io")
     client.user = TESTRAIL_DETAILS["email"]
     client.password = TESTRAIL_DETAILS["password"]
     data = {"status_id": status_id, "comment": comment}
-    response = client.send_post(f"add_result_for_case/{run_id}/{case_id}", data)
+    response = client.send_post(f"add_result_for_case/{run_id}/{case_id}", data, timeout=5)
     print("Successfully uploaded report into Testrail")
     return response
 
 
 def execute_test_and_upload_result():
+    """Execute test and upload the result."""
     try:
         pytest.main(["-v", "-s", __file__])
         post_test_result(
